@@ -1,5 +1,16 @@
 # Neovim from scratch
 
+This is my personal configuration, forked from [LunarVim/Neovim-from-scratch](https://github.com/LunarVim/Neovim-from-scratch).
+
+Major changes are:
+1. Lazy load most of the plugins
+2. Organize keys to fit my use case
+3. Extra plugins.
+
+Below is the original `README.md`
+
+---
+
 Each video will be associated with a branch so checkout the one you are interested in, you can follow along with this [playlist](https://www.youtube.com/watch?v=ctH-a-1eUME&list=PLhoH5vyxr6Qq41NFL4GvhFp-WLd5xzIzZ).
 
 ## Try out this config
