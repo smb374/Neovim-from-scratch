@@ -27,7 +27,7 @@ local diff = {
 local mode = {
 	"mode",
 	fmt = function(str)
-		return "-- " .. str .. " --"
+		return str:sub(1, 1)
 	end,
 }
 
@@ -62,6 +62,37 @@ local spaces = function()
 	return "spaces: " .. vim.api.nvim_buf_get_option(0, "shiftwidth")
 end
 
+local lsp_progress = function()
+  local lsp = vim.lsp.util.get_progress_messages()[1]
+  if lsp then
+    local msg = lsp.message or ""
+    local percentage = lsp.percentage or 0
+    local title = lsp.title or ""
+    local spinners = {
+      "",
+      "",
+      "",
+    }
+
+    local success_icon = {
+      "",
+      "",
+      "",
+    }
+
+    local ms = vim.loop.hrtime() / 1000000
+    local frame = math.floor(ms / 120) % #spinners
+
+    if percentage >= 70 then
+      return string.format(" %%<%s %s %s (%s%%%%) ", success_icon[frame + 1], title, msg, percentage)
+    end
+
+   return string.format(" %%<%s %s %s (%s%%%%) ", spinners[frame + 1], title, msg, percentage)
+  end
+
+  return ""
+end
+
 lualine.setup({
 	options = {
 		icons_enabled = true,
@@ -74,7 +105,7 @@ lualine.setup({
 	sections = {
 		lualine_a = { branch, diagnostics },
 		lualine_b = { mode },
-		lualine_c = {},
+		lualine_c = { lsp_progress },
 		-- lualine_x = { "encoding", "fileformat", "filetype" },
 		lualine_x = { diff, spaces, "encoding", filetype },
 		lualine_y = { location },

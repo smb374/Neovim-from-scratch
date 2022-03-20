@@ -14,7 +14,7 @@ local setup = {
     -- the presets plugin, adds help for a bunch of default keybindings in Neovim
     -- No actual key bindings are created
     presets = {
-      operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+      operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
       motions = true, -- adds help for motions
       text_objects = true, -- help for text objects triggered after entering an operator
       windows = true, -- default bindings on <c-w>
@@ -29,13 +29,13 @@ local setup = {
   key_labels = {
     -- override the label used to display some keys. It doesn't effect WK in any other way.
     -- For example:
-    -- ["<space>"] = "SPC",
-    -- ["<cr>"] = "RET",
-    -- ["<tab>"] = "TAB",
+    ["<space>"] = "SPC",
+    ["<cr>"] = "RET",
+    ["<tab>"] = "TAB",
   },
   icons = {
-    breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-    separator = "➜", -- symbol used between a key and it's label
+    breadcrumb = ">>", -- symbol used in the command line area that shows your active key combo
+    separator = "->", -- symbol used between a key and it's label
     group = "+", -- symbol prepended to a group
   },
   popup_mappings = {
@@ -80,21 +80,41 @@ local opts = {
 
 local mappings = {
   ["a"] = { "<cmd>Alpha<cr>", "Alpha" },
-  ["b"] = {
-    "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-    "Buffers",
+  b = {
+    name = "Buffer",
+    d = { "<cmd>Bdelete!<cr>", "Close buffer" },
+    n = { "<cmd>bnext<cr>", "Next Buffer" },
+    p = { "<cmd>bprevious<cr>", "Previous Buffer" },
+  },
+  t = {
+    name = "Trouble",
+    t = { "<cmd>TroubleToggle<cr>", "Toggle Trouble" },
+    w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "Toggle Workspace Diagnostics" },
+    d = { "<cmd>TroubleToggle document_diagnostics<cr>", "Toggle Document Diagnostics" },
+    q = { "<cmd>TroubleToggle quickfix<cr>", "Toggle Quickfix" },
+    l = { "<cmd>TroubleToggle loclist<cr>", "Toggle Location List" },
+    r = { "<cmd>TroubleToggle lsp_references<cr>", "Toggle LSP Reference" },
   },
   ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" },
-  ["w"] = { "<cmd>w!<CR>", "Save" },
   ["q"] = { "<cmd>q!<CR>", "Quit" },
-  ["c"] = { "<cmd>Bdelete!<CR>", "Close Buffer" },
   ["h"] = { "<cmd>nohlsearch<CR>", "No Highlight" },
-  ["f"] = {
-    "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{previewer = false})<cr>",
-    "Find files",
+  [","] = { "<cmd>lua require('Comment.api').toggle_current_linewise()<CR>", "Toggle Comments" },
+
+  f = {
+    name = "Find",
+    b = { "<cmd>Telescope buffers <cr>", "Buffers" },
+    c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
+    C = { "<cmd>Telescope commands<cr>", "Commands" },
+    f = { "<cmd>Telescope find_files<cr>", "Files", },
+    g = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+    h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
+    k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
+    M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
+    p = { "<cmd>Telescope projects<cr>", "Projects" },
+    r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
+    R = { "<cmd>Telescope registers<cr>", "Registers" },
+    t = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
   },
-  ["F"] = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
-  ["P"] = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
 
   p = {
     name = "Packer",
@@ -107,7 +127,7 @@ local mappings = {
 
   g = {
     name = "Git",
-    g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
+    g = { "<cmd>LazyGit<CR>", "Lazygit" },
     j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
     k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
     l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
@@ -159,19 +179,7 @@ local mappings = {
       "Workspace Symbols",
     },
   },
-  s = {
-    name = "Search",
-    b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-    c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
-    h = { "<cmd>Telescope help_tags<cr>", "Find Help" },
-    M = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-    r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
-    R = { "<cmd>Telescope registers<cr>", "Registers" },
-    k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
-    C = { "<cmd>Telescope commands<cr>", "Commands" },
-  },
-
-  t = {
+  T = {
     name = "Terminal",
     n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
     u = { "<cmd>lua _NCDU_TOGGLE()<cr>", "NCDU" },
@@ -180,6 +188,12 @@ local mappings = {
     f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
     h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
     v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
+  },
+
+  w = {
+    name = "Window",
+    s = { "<cmd>split<cr>", "Split" },
+    v = { "<cmd>vsplit<cr>", "VSplit" },
   },
 }
 

@@ -1,7 +1,7 @@
 local fn = vim.fn
 
 -- Automatically install packer
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+local install_path = fn.stdpath "data" .. "/site/pack/packer/opt/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
   PACKER_BOOTSTRAP = fn.system {
     "git",
@@ -41,58 +41,196 @@ packer.init {
 -- Install your plugins here
 return packer.startup(function(use)
   -- My plugins here
-  use "wbthomason/packer.nvim" -- Have packer manage itself
-  use "nvim-lua/popup.nvim" -- An implementation of the Popup API from vim in Neovim
-  use "nvim-lua/plenary.nvim" -- Useful lua functions used ny lots of plugins
-  use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter
-  use "numToStr/Comment.nvim" -- Easily comment stuff
-  use "kyazdani42/nvim-web-devicons"
-  use "kyazdani42/nvim-tree.lua"
-  use "akinsho/bufferline.nvim"
-  use "moll/vim-bbye"
-  use "nvim-lualine/lualine.nvim"
-  use "akinsho/toggleterm.nvim"
-  use "ahmedkhalf/project.nvim"
+  use {
+    "wbthomason/packer.nvim",
+    opt = true,
+  }
+  use "nvim-lua/popup.nvim"
+  use "nvim-lua/plenary.nvim"
+  use {
+    "windwp/nvim-autopairs",
+    after = "nvim-cmp",
+    config = [[require("user.autopairs")]]
+  }
+  use {
+    "numToStr/Comment.nvim",
+    module = "Comment",
+    keys = { "gc", "gcc", "gbc" },
+    config = [[require("user.comment")]],
+  }
+  use {
+    "kyazdani42/nvim-web-devicons",
+    module = "nvim-web-devicons",
+    config = function ()
+      require("nvim-web-devicons").setup({default = true})
+    end
+  }
+  use {
+    "kyazdani42/nvim-tree.lua",
+    cmd = { "NvimTreeToggle", "NvimTreeFocus" },
+    config = [[require("user.nvim-tree")]]
+  }
+  use {
+    "akinsho/bufferline.nvim",
+    event = "BufReadPre",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = [[require("user.bufferline")]]
+  }
+  use {
+    "moll/vim-bbye",
+    cmd = { "Bdelete", "Bwipeout" },
+  }
+  use {
+    "nvim-lualine/lualine.nvim",
+    event = "VimEnter",
+    wants = "nvim-web-devicons",
+    config = [[require("user.lualine")]]
+  }
+  use {
+    "akinsho/toggleterm.nvim",
+    cmd = "ToggleTerm",
+    config = [[require("user.toggleterm")]]
+  }
+  use {
+    "ahmedkhalf/project.nvim",
+    event = "VimEnter",
+    config = [[require("user.project")]],
+  }
   use "lewis6991/impatient.nvim"
-  use "lukas-reineke/indent-blankline.nvim"
-  use "goolord/alpha-nvim"
-  use "antoinemadec/FixCursorHold.nvim" -- This is needed to fix lsp doc highlight
-  use "folke/which-key.nvim"
+  use {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "BufReadPre",
+    config = [[require("user.indentline")]]
+  }
+  use {
+    "goolord/alpha-nvim",
+    event = "VimEnter",
+    config = [[require("user.alpha")]]
+  }
+  use "antoinemadec/FixCursorHold.nvim"
+  use {
+    "folke/which-key.nvim",
+    event = "VimEnter",
+    config = [[require("user.whichkey")]]
+  }
+  use {
+    "folke/trouble.nvim",
+    cmd = { "Trouble", "TroubleToggle", "TroubleRefresh" },
+    requires = "kyazdani42/nvim-web-devicons",
+    config = [[require("user.diag")]],
+  }
 
   -- Colorschemes
-  -- use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
+  use "lunarvim/colorschemes"
   use "lunarvim/darkplus.nvim"
+  use "folke/tokyonight.nvim"
+  use {
+    "challenger-deep-theme/vim",
+    as = "challenger-deep",
+  }
 
   -- cmp plugins
-  use "hrsh7th/nvim-cmp" -- The completion plugin
-  use "hrsh7th/cmp-buffer" -- buffer completions
-  use "hrsh7th/cmp-path" -- path completions
-  use "hrsh7th/cmp-cmdline" -- cmdline completions
-  use "saadparwaiz1/cmp_luasnip" -- snippet completions
-  use "hrsh7th/cmp-nvim-lsp"
+  use {
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
+    config = [[require("user.cmp")]]
+  }
+  use {
+    "hrsh7th/cmp-buffer",
+    after = "nvim-cmp",
+  }
+  use {
+    "hrsh7th/cmp-path",
+    after = "nvim-cmp",
+  }
+  use {
+    "hrsh7th/cmp-cmdline",
+    after = "nvim-cmp",
+  }
+  use {
+    "saadparwaiz1/cmp_luasnip",
+    after = "nvim-cmp",
+  }
+  use {
+    "hrsh7th/cmp-nvim-lsp",
+    module = "cmp_nvim_lsp",
+  }
+  use {
+    "hrsh7th/cmp-nvim-lua",
+    after = "nvim-cmp",
+  }
 
   -- snippets
-  use "L3MON4D3/LuaSnip" --snippet engine
-  use "rafamadriz/friendly-snippets" -- a bunch of snippets to use
+  use {
+    "L3MON4D3/LuaSnip",
+    wants = "friendly-snippets",
+    after = "nvim-cmp",
+  }
+  use {
+    "rafamadriz/friendly-snippets",
+    after = "nvim-cmp",
+  }
 
   -- LSP
-  use "neovim/nvim-lspconfig" -- enable LSP
-  use "williamboman/nvim-lsp-installer" -- simple to use language server installer
-  use "tamago324/nlsp-settings.nvim" -- language server settings defined in json for
-  use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
+  use {
+    "neovim/nvim-lspconfig",
+    event = "BufReadPre",
+    config = [[require("user.lsp")]],
+    requires = {
+      {
+        "williamboman/nvim-lsp-installer",
+        module = "nvim-lsp-installer",
+        cmd = {
+          "LspInstall",
+          "LspInstallInfo",
+          "LspUninstall",
+          "LspUninstallAll",
+          "LspInstallLog",
+        },
+      },
+      {
+        "tamago324/nlsp-settings.nvim",
+        after = "nvim-lspconfig",
+      },
+      {
+        "jose-elias-alvarez/null-ls.nvim",
+        module = "null-ls",
+      },
+    },
+  }
 
   -- Telescope
-  use "nvim-telescope/telescope.nvim"
+  use {
+    "nvim-telescope/telescope.nvim",
+    cmd = "Telescope",
+    module = "telescope",
+    config = [[require("user.telescope")]]
+  }
 
   -- Treesitter
   use {
     "nvim-treesitter/nvim-treesitter",
+    event = "BufNew",
+    config = [[require("user.treesitter")]],
     run = ":TSUpdate",
+    requires = {
+      {
+        "JoosepAlviste/nvim-ts-context-commentstring",
+        after = "nvim-treesitter"
+      }
+    }
   }
-  use "JoosepAlviste/nvim-ts-context-commentstring"
 
   -- Git
-  use "lewis6991/gitsigns.nvim"
+  use {
+    "lewis6991/gitsigns.nvim",
+    event = "VimEnter",
+    config = [[require("user.gitsigns")]]
+  }
+  use {
+    "kdheepak/lazygit.nvim",
+    cmd = { "LazyGit", "LazyGitConfig" },
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
