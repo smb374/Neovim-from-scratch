@@ -114,6 +114,7 @@ local mappings = {
     r = { "<cmd>Telescope oldfiles<cr>", "Open Recent File" },
     R = { "<cmd>Telescope registers<cr>", "Registers" },
     t = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
+    T = { "<cmd>Telescope<cr>", "Telescope" },
   },
 
   p = {

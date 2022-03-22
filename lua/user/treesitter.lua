@@ -3,6 +3,13 @@ if not status_ok then
   return
 end
 
+local present, orgmode = pcall(require, "orgmode")
+if not present then
+  return
+end
+
+orgmode.setup_ts_grammar()
+
 configs.setup {
   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
   sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
@@ -13,7 +20,7 @@ configs.setup {
   highlight = {
     enable = true, -- false will disable the whole extension
     disable = { "" }, -- list of language that will be disabled
-    additional_vim_regex_highlighting = true,
+    additional_vim_regex_highlighting = { "org" },
     use_languagetree = true,
   },
   indent = { enable = true, disable = { "yaml" } },

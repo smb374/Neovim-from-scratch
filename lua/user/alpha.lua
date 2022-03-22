@@ -28,7 +28,7 @@ local function footer()
 	-- local fortune = handle:read("*a")
 	-- handle:close()
 	-- return fortune
-	return "by smb374, fork from chrisatmachine.com"
+	return "by smb374, forked from LunarVim/Neovim-from-scratch"
 end
 
 dashboard.section.footer.val = footer()

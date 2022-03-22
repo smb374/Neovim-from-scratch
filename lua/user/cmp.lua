@@ -31,7 +31,7 @@ local kind_icons = {
   Value = "",
   Enum = "",
   Keyword = "",
-  Snippet = "",
+  Snippet = "",
   Color = "",
   File = "",
   Reference = "",
@@ -103,6 +103,7 @@ cmp.setup {
       vim_item.menu = ({
         nvim_lua = "[API]",
         nvim_lsp = "[LSP]",
+        orgmode = "[Org]",
         luasnip = "[Snippet]",
         buffer = "[Buffer]",
         path = "[Path]",
@@ -113,6 +114,7 @@ cmp.setup {
   sources = {
     { name = 'nvim_lua' },
     { name = "nvim_lsp" },
+    { name = "orgmode" },
     { name = "luasnip" },
     { name = "buffer" },
     { name = "path" },

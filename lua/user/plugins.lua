@@ -119,15 +119,41 @@ return packer.startup(function(use)
     requires = "kyazdani42/nvim-web-devicons",
     config = [[require("user.diag")]],
   }
+  use {
+    "norcalli/nvim-colorizer.lua",
+    config = function ()
+      require("colorizer").setup()
+    end
+  }
 
   -- Colorschemes
-  use "lunarvim/colorschemes"
-  use "lunarvim/darkplus.nvim"
-  use "folke/tokyonight.nvim"
   use {
-    "challenger-deep-theme/vim",
-    as = "challenger-deep",
+    "folke/tokyonight.nvim",
+    config = function ()
+      local g = vim.g
+      g.tokyonight_style = "night"
+      g.tokyonight_italic_functions = true
+      g.tokyonight_sidebars = { "qf", "vista_kind", "terminal", "packer" }
+
+      vim.cmd([[colorscheme tokyonight]])
+    end
   }
+  -- use {
+  --   "rmehri01/onenord.nvim",
+  --   config = function ()
+  --     require('onenord').setup({
+  --       theme = "dark",
+  --       styles = {
+  --         comments = "italic",
+  --         strings = "NONE",
+  --         keywords = "italic",
+  --         functions = "italic",
+  --         variables = "NONE",
+  --         diagnostics = "underline",
+  --       },
+  --     })
+  --   end
+  -- }
 
   -- cmp plugins
   use {
@@ -198,6 +224,13 @@ return packer.startup(function(use)
       },
     },
   }
+  use {
+    "folke/lsp-colors.nvim",
+    after = "nvim-lspconfig",
+    config = function ()
+      require("lsp-colors").setup()
+    end
+  }
 
   -- Telescope
   use {
@@ -210,15 +243,16 @@ return packer.startup(function(use)
   -- Treesitter
   use {
     "nvim-treesitter/nvim-treesitter",
-    event = "BufNew",
     config = [[require("user.treesitter")]],
     run = ":TSUpdate",
-    requires = {
-      {
-        "JoosepAlviste/nvim-ts-context-commentstring",
-        after = "nvim-treesitter"
-      }
-    }
+  }
+  use {
+    "nvim-treesitter/playground",
+    after = "nvim-treesitter"
+  }
+  use {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    after = "nvim-treesitter"
   }
 
   -- Git
@@ -230,6 +264,30 @@ return packer.startup(function(use)
   use {
     "kdheepak/lazygit.nvim",
     cmd = { "LazyGit", "LazyGitConfig" },
+  }
+
+  -- Markdown
+  use {
+    "davidgranstrom/nvim-markdown-preview",
+  }
+
+  -- OrgMode
+  use {
+    "nvim-orgmode/orgmode",
+    wants = "nvim-treesitter",
+    config = function ()
+      require("orgmode").setup()
+    end
+  }
+
+  -- Mini.nvim
+  use {
+    "echasnovski/mini.nvim",
+    tag = "v0.3.0",
+    config = function ()
+      -- Enable Surround
+      require("user.surround")
+    end
   }
 
   -- Automatically set up your configuration after cloning packer.nvim
